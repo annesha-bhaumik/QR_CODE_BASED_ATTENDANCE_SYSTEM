@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | QR Code Based Attendance System</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        form{
+            text-align: left;
+        }
+        label{
+            font-size: 15px;
+        }
+        input, select{
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            border: 1px solid blue;
+            border-radius: 5px;
+        }
+        button{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Login</h1>
+        <form onsubmit="handleLogin(event)">
+            <label for="role">Login As</label>
+            <select id="role" required>
+                <option value="">Select Role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter ID" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        function handleLogin(event)
+        {
+            event.preventDefault();
+            const role = document.getElementById("role").value;
+            if(role === "student")
+            {
+                window.location.href="../student/dashboard.html";
+            }
+            else if(role === "teacher")
+            {
+                window.location.href="../teacher/dashboard.html";
+            }
+            else
+            {
+                alert("Please select a role");
+            }
+        }
+    </script>
+</body>
+</html>

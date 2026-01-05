@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan QR | QR Code Based Attendance System</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        body{
+            display: block;
+        }
+        h1{
+            margin-bottom: 10px;
+        }
+        p{
+            margin: 0px;
+        }
+        .back-btn button{
+            margin-top: 0px;
+            white-space: nowrap;
+        }
+        .back-btn button:hover{
+            background-color: red;
+            color: white;
+        }
+        .container{
+            margin: 30px 25px;
+            padding: 50px;
+        }
+        #reader{
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+        }
+        .status{
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .success{
+            color: rgb(0, 196, 0);
+        }
+        .error{
+            color: rgb(255, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Scan QR Code</h1>
+            <p>Point your camera at the QR code</p>
+        </div>
+        <div class="back-btn">
+            <button onclick="goBack()">< Back</button>
+        </div>
+    </div>
+    <div class="container">
+        <div id="reader"></div>
+        <div id="result" class="status"></div>
+    </div>
+    <script>
+        const resultDiv = document.getElementById("result");
+        function onScanSuccess(decodedText)
+            {
+                html5QrCode.stop();
+                console.log("Scanned QR Data: ",decodedText);
+                resultDiv.innerHTML = "Attendance Marked(Pending Verification)";
+                resultDiv.className = "status success";
+            }
+            function onScanFailure(error)
+            {}
+            const html5QrCode = new Html5QrCode("reader");
+            Html5QrCode.getCameras().then(cameras => {
+                if(cameras && cameras.length)
+                {
+                    html5QrCode.start(
+                        cameras[0].id,
+                        {
+                            fps: 10,
+                            qrbox: 250
+                        },
+                        onScanSuccess,
+                        onScanFailure
+                    );
+                }
+            }).catch(err => {
+                resultDiv.innerHTML = "Camera access denied";
+                resultDiv.className = "status error";
+            });
+            function goBack()
+            {
+                window.location.href = "dashboard.html";
+            }
+    </script>
+</body>
+</html>

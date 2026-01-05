@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard | QR Code Based Attendance System</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <style>
+        body{
+            display: block;
+        }
+        h1{
+            margin-bottom: 10px;
+        }
+        p{
+            margin: 0px;
+        }
+        .logout button{
+            margin-top: 0px;
+        }
+        .logout button:hover{
+            background-color: red;
+            color: white;
+        }
+        .container{
+            margin: 30px 25px;
+            padding: 50px;
+        }
+        .card{
+            padding: 25px;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+        }
+        .table-container{
+            overflow-x: auto;
+            width: 100%;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td{
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            font-size: 15px;
+        }
+        table th{
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .status{
+            font-weight: bold;
+        }
+        .pending{
+            color: rgb(255, 0, 0);
+        }
+        .present{
+            color: rgb(0, 196, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Student Dashboard</h1>
+            <p>Welcome, Student</p>
+        </div>
+        <div class="logout">
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <h3>Mark Attendance</h3>
+            <p>Scan the displayed QR code to mark your attendance</p>
+            <button class="scan-btn" onclick="goToScan()">Scan QR Code</button>
+        </div>
+        <div class="card">
+            <h3>Today's Attendance</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTable">
+                        <tr>
+                            <td>OS</td>
+                            <td>10:00am</td>
+                            <td class="status present">Present</td>
+                        </tr>
+                        <tr>
+                            <td>DSA</td>
+                            <td>11:00am</td>
+                            <td class="status pending">Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        function goToScan()
+        {
+            window.location.href = "scan.html";
+        }
+        function logout()
+        {
+            window.location.href = "../auth/login.html";
+        }
+    </script>
+</body>
+</html>
