@@ -29,9 +29,19 @@
             padding: 50px;
         }
         #reader{
-            width: 100%;
-            max-width: 400px;
+            max-width: 300px;
             margin: auto;
+            border: 1px solid white;
+        }
+        .loading-text{
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-style: italic;
         }
         .status{
             text-align: center;
@@ -40,9 +50,11 @@
             font-weight: bold;
         }
         .success{
+            font-size: large;
             color: rgb(0, 196, 0);
         }
         .error{
+            font-size: large;
             color: rgb(255, 0, 0);
         }
     </style>
@@ -58,42 +70,56 @@
         </div>
     </div>
     <div class="container">
-        <div id="reader"></div>
+        <div id="reader">
+            <div class="loading-text">Initializing Camera...</div>
+        </div>
         <div id="result" class="status"></div>
     </div>
     <script>
+    document.addEventListener("DOMContentLoaded", async () =>
+    {
         const resultDiv = document.getElementById("result");
-        function onScanSuccess(decodedText)
+        let scanned = false;
+        try
+        {
+            // Check camera access
+            const devices = await Html5Qrcode.getCameras();
+            if (!devices || devices.length === 0)
             {
-                html5QrCode.stop();
-                console.log("Scanned QR Data: ",decodedText);
-                resultDiv.innerHTML = "Attendance Marked(Pending Verification)";
-                resultDiv.className = "status success";
-            }
-            function onScanFailure(error)
-            {}
-            const html5QrCode = new Html5QrCode("reader");
-            Html5QrCode.getCameras().then(cameras => {
-                if(cameras && cameras.length)
-                {
-                    html5QrCode.start(
-                        cameras[0].id,
-                        {
-                            fps: 10,
-                            qrbox: 250
-                        },
-                        onScanSuccess,
-                        onScanFailure
-                    );
-                }
-            }).catch(err => {
-                resultDiv.innerHTML = "Camera access denied";
+                resultDiv.innerHTML = "No camera found";
                 resultDiv.className = "status error";
-            });
-            function goBack()
-            {
-                window.location.href = "dashboard.html";
+                return;
             }
-    </script>
+            const cameraId = devices[0].id;
+            const html5QrCode = new Html5Qrcode("reader");
+            document.querySelector(".loading-text")?.remove();
+            html5QrCode.start(
+                cameraId,
+                { fps: 10, qrbox: 250 },
+                (decodedText) => 
+                {
+                    if(scanned) return;
+                    scanned = true;
+                    console.log("QR Scanned:", decodedText);
+                    html5QrCode.stop().then(() =>
+                    {
+                        resultDiv.innerHTML = "Attendance Marked (Pending Verification)";
+                        resultDiv.className = "status success";
+                    });
+                },
+                () => {}
+            );
+        } catch (err)
+        {
+            console.error(err);
+            resultDiv.innerHTML = "Camera failed to start: " + err;
+            resultDiv.className = "status error";
+        }
+    });
+    function goBack()
+    {
+        window.location.href = "dashboard.html";
+    }
+</script>
 </body>
 </html>
