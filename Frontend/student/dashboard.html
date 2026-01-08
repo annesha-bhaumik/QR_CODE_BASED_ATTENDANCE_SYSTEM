@@ -65,7 +65,7 @@
     <div class="header">
         <div>
             <h1>Student Dashboard</h1>
-            <p>Welcome, Student</p>
+            <p>Welcome, <span id="userName"></span></p>
         </div>
         <div class="logout">
             <button onclick="logout()">Logout</button>
@@ -104,19 +104,6 @@
             </div>
         </div>
     </div>
-    <script>
-        if(localStorage.getItem("loggedIn") !== "true" || localStorage.getItem("role") !== "student")
-        {
-            window.location.href = "../auth/login.html";
-        }
-        function goToScan()
-        {
-            window.location.href = "scan.html";
-        }
-        function logout()
-        {
-            window.location.href = "../auth/login.html";
-        }
-    </script>
+    <script src="student.js"></script>
 </body>
 </html>

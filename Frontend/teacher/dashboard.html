@@ -73,6 +73,10 @@
             font-size: 14px;
             margin-top: 0px;
         }
+        .present{
+            color: rgba(0, 224, 0, 1);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -118,56 +122,6 @@
             </div>
         </div>
     </div>
-    <script>
-        if(localStorage.getItem("loggedIn") !== "true" || localStorage.getItem("role") !== "teacher")
-        {
-            window.location.href = "../auth/login.html";
-        }
-        function loadAttendance()
-        {
-            const subject = document.getElementById("subject").value;
-            const date = document.getElementById("date").value;
-            const card = document.getElementById("attendanceCard");
-            const table = document.getElementById("attendanceTable");
-            if(subject === "")
-            {
-                alert("Please select 'Subject' !");
-                card.style.display = "none";
-                return;
-            }
-            else if(date === "")
-            {
-                alert("Please select 'Date' !");
-                card.style.display = "none";
-                return;
-            }
-            card.style.display = "block";
-            const data = [
-                { roll: "01", name: "ABC", status: "Pending "},
-                { roll: "02", name: "DEF", status: "Pending "}
-            ];
-            table.innerHTML = "";
-            data.forEach(student => {
-                table.innerHTML += `
-                    <tr>
-                        <td>${student.roll}</td>
-                        <td>${student.name}</td>
-                        <td>${student.status}</td>
-                        <td>
-                            <button class="verify-btn" onclick="verifyAttendance('${student.roll}')">Verify</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        function verifyAttendance(roll)
-        {
-            alert("Attendance verified for Roll No: " +roll);
-        }
-        function logout()
-        {
-            window.location.href = "../auth/login.html";
-        }
-    </script>
+    <script src="teacher.js"></script>
 </body>
 </html>
