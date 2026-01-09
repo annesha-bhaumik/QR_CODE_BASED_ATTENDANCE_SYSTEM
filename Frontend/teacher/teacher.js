@@ -1,7 +1,3 @@
-if(localStorage.getItem("loggedIn") !== "true" || localStorage.getItem("role") !== "teacher")
-{
-    window.location.href = "../auth/login.html";
-}
 function loadAttendance()
 {
     const subject = document.getElementById("subject").value;
