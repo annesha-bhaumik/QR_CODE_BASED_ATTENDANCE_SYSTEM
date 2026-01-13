@@ -1,3 +1,4 @@
+import { logoutUser } from "../utils/api.js";
 document.getElementById("userName").innerText = localStorage.getItem("user") || "User";
 function goToScan()
 {
@@ -5,6 +6,8 @@ function goToScan()
 }
 function logout()
 {
-    localStorage.clear();
+    logoutUser();
     window.location.href = "../auth/login.html";
 }
+window.goToScan = goToScan;
+window.logout = logout;

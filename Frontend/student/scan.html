@@ -76,7 +76,8 @@
         <div id="result" class="status"></div>
     </div>
     <script src="../assets/js/auth-check.js"></script>
-    <script>
+    <script type="module">
+    import { markAttendance } from "../utils/api.js";
     document.addEventListener("DOMContentLoaded", async () =>
     {
         const resultDiv = document.getElementById("result");
@@ -101,11 +102,19 @@
                 {
                     if(scanned) return;
                     scanned = true;
-                    console.log("QR Scanned:", decodedText);
+                    const result = markAttendance(decodedText);
                     html5QrCode.stop().then(() =>
                     {
-                        resultDiv.innerHTML = "Attendance Marked (Pending Verification)";
-                        resultDiv.className = "status success";
+                        if (result.success)
+                        {
+                            resultDiv.innerHTML = "Attendance Marked (Pending Verification)";
+                            resultDiv.className = "status success";
+                        }
+                        else
+                        {
+                            resultDiv.innerHTML = result.message;
+                            resultDiv.className = "status error";
+                        }
                     });
                 },
                 () => {}
@@ -121,6 +130,7 @@
     {
         window.location.href = "dashboard.html";
     }
+    window.goBack = goBack;
 </script>
 </body>
 </html>

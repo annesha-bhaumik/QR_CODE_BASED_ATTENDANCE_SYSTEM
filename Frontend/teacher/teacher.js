@@ -1,3 +1,4 @@
+import { logoutUser } from "../utils/api.js";
 function loadAttendance()
 {
     const subject = document.getElementById("subject").value;
@@ -53,6 +54,9 @@ function verifyAttendance(btn)
 }
 function logout()
 {
-    localStorage.clear();
+    logoutUser();
     window.location.href = "../auth/login.html";
 }
+window.loadAttendance = loadAttendance;
+window.verifyAttendance = verifyAttendance;
+window.logout = logout;

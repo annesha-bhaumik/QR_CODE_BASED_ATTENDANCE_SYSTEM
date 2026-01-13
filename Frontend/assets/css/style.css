@@ -47,7 +47,7 @@ button{
 }
 button:hover{
     background-color: rgb(161, 205, 255);
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 button:active{
     transform: scale(1);
