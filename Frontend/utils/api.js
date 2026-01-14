@@ -19,6 +19,10 @@ export function startClassSession(subject, location)
     const today = new Date().toISOString().split("T")[0];
     localStorage.setItem("activeSession", JSON.stringify({subject, location, date : today}));
 }
+export function endClassSession()
+{
+    localStorage.removeItem("activeSession");
+}
 
 export function markAttendance(location)
 {

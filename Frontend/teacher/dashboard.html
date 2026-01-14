@@ -32,7 +32,7 @@
             border-radius: 15px;
             box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
         }
-        .select-class{
+        .select-class, .create-session{
             text-align: left;
         }
         form{
@@ -47,9 +47,6 @@
             margin: 8px 0 15px;
             border: 1px solid blue;
             border-radius: 5px;
-        }
-        .view-btn{
-            width: 100%;
         }
         .table-container{
             overflow-x: auto;
@@ -91,6 +88,17 @@
     </div>
     <div class="container">
         <div class="card">
+            <h3>Create Session</h3>
+            <div class="create-session">
+                <label>Location</label>
+                <input type="text" id="loc" placeholder="Enter location">
+                <label>Subject</label>
+                <input type="text" id="sub" placeholder="Enter subject">
+            </div>
+            <button id="startBtn" onclick="startSession()">Start Session</button>
+            <button id="endBtn" onclick="endSession()" style="display:none;">End Session</button>
+        </div>
+        <div class="card">
             <h3>Select Session</h3>
             <div class="select-class">
                 <label>Location</label>
@@ -107,8 +115,8 @@
                 </select>
                 <label>Date</label>
                 <input type="date" id="date">
-                <button class="view-btn" onclick="loadAttendance()">View Attendance</button>
             </div>
+            <button class="view-btn" onclick="loadAttendance()">View Attendance</button>
         </div>
         <div class="card" id="attendanceCard" style="display: none;">
             <h3>Attendance (Pending Verification)</h3>

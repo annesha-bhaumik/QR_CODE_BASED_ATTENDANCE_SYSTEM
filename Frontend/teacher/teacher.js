@@ -1,4 +1,41 @@
-import { logoutUser } from "../utils/api.js";
+import { logoutUser, startClassSession, endClassSession } from "../utils/api.js";
+const startBtn = document.getElementById("startBtn");
+const endBtn = document.getElementById("endBtn");
+document.addEventListener("DOMContentLoaded", () =>
+{
+    const session = localStorage.getItem("activeSession");
+    if(session)
+    {
+        startBtn.style.display = "none";
+        endBtn.style.display = "inline";
+    }
+    else
+    {
+        startBtn.style.display = "inline";
+        endBtn.style.display = "none";
+    }
+});
+function startSession()
+{
+    const loc = document.getElementById("loc").value;
+    const sub = document.getElementById("sub").value;
+    if(!loc || !sub)
+    {
+        alert("Enter location and subject");
+        return;
+    }
+    startClassSession(sub, loc);
+    startBtn.style.display = "none";
+    endBtn.style.display = "inline";
+    alert("Session started");
+}
+function endSession()
+{
+    endClassSession();
+    startBtn.style.display = "inline";
+    endBtn.style.display = "none";
+    alert("Session ended");
+}
 function loadAttendance()
 {
     const subject = document.getElementById("subject").value;
@@ -57,6 +94,8 @@ function logout()
     logoutUser();
     window.location.href = "../auth/login.html";
 }
+window.startSession = startSession;
+window.endSession = endSession;
 window.loadAttendance = loadAttendance;
 window.verifyAttendance = verifyAttendance;
 window.logout = logout;
