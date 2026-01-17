@@ -1,4 +1,4 @@
-import { logoutUser, startClassSession, endClassSession } from "../utils/api.js";
+import { logoutUser, startClassSession, endClassSession, getAttendanceBySession, verifyAttendance } from "../utils/api.js";
 const startBtn = document.getElementById("startBtn");
 const endBtn = document.getElementById("endBtn");
 document.addEventListener("DOMContentLoaded", () =>
@@ -38,51 +38,55 @@ function endSession()
 }
 function loadAttendance()
 {
+    const location = document.getElementById("location").value;
     const subject = document.getElementById("subject").value;
     const date = document.getElementById("date").value;
     const card = document.getElementById("attendanceCard");
     const table = document.getElementById("attendanceTable");
-    if(!subject || !date)
+    if(!location  || !subject || !date)
     {
-        alert("Please select Subject and Date!");
+        alert("Please select Location, Subject and Date!");
         card.style.display = "none";
         return;
     }
+    const data = getAttendanceBySession(location, subject, date);
     card.style.display = "block";
-    const data = [
-        { roll: "01", name: "ABC", status: "Pending "},
-        { roll: "02", name: "DEF", status: "Pending "}
-    ];
     table.innerHTML = "";
     if(data.length === 0)
     {
         table.innerHTML = `
         <tr>
-            <td colspan="4" style="font-size:20px">No attendance records found!</td>
+            <td colspan="4">No attendance records found!</td>
         </tr>
         `;
         return;
     }
-    data.forEach(student => {
+    data.forEach((student, index) => {
     table.innerHTML += `
     <tr>
-        <td>${student.roll}</td>
-        <td>${student.name}</td>
-        <td class="status pending">Pending</td>
+        <td>${index + 1}</td>
+        <td>${student.user}</td>
+        <td class="${student.status === "Present" ? "present" : "pending"}">${student.status}</td>
         <td>
-            <button class="verify-btn" onclick="verifyAttendance(this)">Verify</button>
+            ${student.status === "Pending" ? `<button class="verify-btn" onclick="verifyAttendance(${index}, this)">Verify</button>` : "-"}
         </td>
     </tr>
     `;
     });
 }
-function verifyAttendance(btn)
+function verifyStudentAttendance(index, btn)
 {
+    const success = verifyAttendance(index);
+    if (!success)
+    {
+        alert("Verification failed");
+        return;
+    }
     const row = btn.closest("tr");
     const statusCell = row.children[2];
+    statusCell.innerText = "Present";
     statusCell.classList.remove("pending"); 
     statusCell.classList.add("present"); 
-    statusCell.innerText = "Present";
     btn.disabled = true;
     btn.innerText = "Verified";
     btn.style.backgroundColor = "rgba(126, 126, 126, 0.4)";
@@ -97,5 +101,5 @@ function logout()
 window.startSession = startSession;
 window.endSession = endSession;
 window.loadAttendance = loadAttendance;
-window.verifyAttendance = verifyAttendance;
+window.verifyStudentAttendance = verifyStudentAttendance;
 window.logout = logout;

@@ -14,10 +14,10 @@ export function logoutUser()
     localStorage.clear();
 }
 
-export function startClassSession(subject, location)
+export function startClassSession(location, subject)
 {
     const today = new Date().toISOString().split("T")[0];
-    localStorage.setItem("activeSession", JSON.stringify({subject, location, date : today}));
+    localStorage.setItem("activeSession", JSON.stringify({location, subject, date : today}));
 }
 export function endClassSession()
 {
@@ -56,10 +56,10 @@ export function getStudentAttendance(username)
     return attendance.filter(a => a.user === username);
 }
 
-export function getAttendanceBySession(subject, location, date)
+export function getAttendanceBySession(location, subject, date)
 {
     const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-    return attendance.filter(a => a.subject === subject && a.location === location && a.date === date);
+    return attendance.filter(a => a.location === location && a.subject === subject && a.date === date);
 }
 export function verifyAttendance(index)
 {
