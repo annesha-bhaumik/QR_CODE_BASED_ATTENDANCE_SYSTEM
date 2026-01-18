@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body{
+            display: block;
+        }
+        .container{
+            margin: 30px 25px;
+            padding: 50px;
+        }
+        .card{
+            padding: 25px;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 5px 5px 20px rgba(0,0,0,0.5);
+        }
+        .enter-location{
+            text-align: left;
+        }
+        label{
+            font-size: 15px;
+        }
+        input{
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px 0;
+            border: 1px solid blue;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Static QR Codes</h1>
+        <div class="card">
+            <div class="enter-location">
+                <label>Location</label>
+                <input id="data" placeholder="Enter location">
+            </div>
+            <button onclick="generateQR()">Generate QR Code</button>
+        </div>
+        <div class="card">
+            <div id="qr"></div>
+        </div>
+    </div>
+    <script>
+        function generateQR()
+        {
+            const data = document.getElementById("data").value;
+            if(!data) return alert("Enter a location");
+            document.getElementById("qr").innerHTML = "";
+            QRCode.toCanvas(data, {width:200}, function(err, canvas)
+            {
+                if (err) console.error(err);
+                document.getElementById("qr").appendChild(canvas);
+            });
+        }
+    </script>
+</body>
+</html>
