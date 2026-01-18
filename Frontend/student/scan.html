@@ -84,20 +84,11 @@
         let scanned = false;
         try
         {
-            // Check camera access
-            const devices = await Html5Qrcode.getCameras();
-            if (!devices || devices.length === 0)
-            {
-                resultDiv.innerHTML = "No camera found";
-                resultDiv.className = "status error";
-                return;
-            }
-            const cameraId = devices[0].id;
             const html5QrCode = new Html5Qrcode("reader");
             document.querySelector(".loading-text")?.remove();
             html5QrCode.start(
-                cameraId,
-                { fps: 10, qrbox: 250 },
+                { facingMode : "environment"},
+                { fps: 10, qrbox: {width:300,height:300} },
                 (decodedText) => 
                 {
                     if(scanned) return;
