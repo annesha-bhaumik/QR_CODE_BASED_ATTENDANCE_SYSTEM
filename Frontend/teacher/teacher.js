@@ -1,10 +1,10 @@
-import { logoutUser, startClassSession, endClassSession, getAttendanceBySession, verifyAttendance } from "../utils/api.js";
+import { getActiveSession, logoutUser, startClassSession, endClassSession, getAttendanceBySession, verifyAttendance } from "../utils/api.js";
 const startBtn = document.getElementById("startBtn");
 const endBtn = document.getElementById("endBtn");
-document.addEventListener("DOMContentLoaded", () =>
+document.addEventListener("DOMContentLoaded", async () =>
 {
-    const session = localStorage.getItem("activeSession");
-    if(session)
+    const res = await getActiveSession();
+    if(res.session)
     {
         startBtn.style.display = "none";
         endBtn.style.display = "inline";
@@ -36,7 +36,7 @@ function endSession()
     endBtn.style.display = "none";
     alert("Session ended");
 }
-function loadAttendance()
+async function loadAttendance()
 {
     const location = document.getElementById("location").value;
     const subject = document.getElementById("subject").value;
@@ -49,49 +49,46 @@ function loadAttendance()
         card.style.display = "none";
         return;
     }
-    const data = getAttendanceBySession(location, subject, date);
+    const data = await getAttendanceBySession(location, subject, date);
     card.style.display = "block";
     table.innerHTML = "";
     if(data.length === 0)
     {
         table.innerHTML = `
         <tr>
-            <td colspan="4">No attendance records found!</td>
+            <td colspan="3">No attendance records found!</td>
         </tr>
         `;
         return;
     }
-    data.forEach((student, index) => {
+    data.forEach(student => {
     table.innerHTML += `
     <tr>
-        <td>${index + 1}</td>
-        <td>${student.user}</td>
+        <td>${student.username}</td>
         <td class="${student.status === "Present" ? "present" : "pending"}">${student.status}</td>
         <td>
-            ${student.status === "Pending" ? `<button class="verify-btn" onclick="verifyAttendance(${index}, this)">Verify</button>` : "-"}
+            ${student.status === "Pending" ? `<button class="verify-btn" onclick="verifyStudentAttendance('${student.username}', '${student.subject}', '${student.date}', this)">Verify</button>` : "-"}
         </td>
     </tr>
     `;
     });
 }
-function verifyStudentAttendance(index, btn)
+async function verifyStudentAttendance(username, subject, date, btn)
 {
-    const success = verifyAttendance(index);
-    if (!success)
+    const res = await verifyAttendance({username, subject, date});
+    if (!res.success)
     {
         alert("Verification failed");
         return;
     }
     const row = btn.closest("tr");
-    const statusCell = row.children[2];
+    const statusCell = row.children[1];
     statusCell.innerText = "Present";
-    statusCell.classList.remove("pending"); 
-    statusCell.classList.add("present"); 
-    btn.disabled = true;
+    statusCell.classList.remove("pending");
+    statusCell.classList.add("present");
     btn.innerText = "Verified";
-    btn.style.backgroundColor = "rgba(126, 126, 126, 0.4)";
+    btn.disabled = true;
     btn.style.cursor = "not-allowed";
-    btn.style.boxShadow = "none";
 }
 function logout()
 {

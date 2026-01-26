@@ -1,3 +1,5 @@
+const BASE_URL = "http://localhost:3000";
+
 export function loginUser(username, password, role)
 {
     if (!role || !username || !password)
@@ -14,61 +16,59 @@ export function logoutUser()
     localStorage.clear();
 }
 
-export function startClassSession(location, subject)
+export async function startClassSession(subject, location)
 {
-    const today = new Date().toISOString().split("T")[0];
-    localStorage.setItem("activeSession", JSON.stringify({location, subject, date : today}));
+    const res = await fetch(`${BASE_URL}/session/start`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify({subject, location})
+    });
+    return await res.json();
 }
-export function endClassSession()
+export async function endClassSession()
 {
-    localStorage.removeItem("activeSession");
+    const res = await fetch(`${BASE_URL}/session/end`, {
+        method : "POST"
+    });
+    return await res.json();
 }
-
-export function markAttendance(location)
+export async function getActiveSession()
 {
-    const session = JSON.parse(localStorage.getItem("activeSession"));
-    if (!session) return {success: false, message: "No active class session"};
-    if (session.location !== location)
-    {
-        return {success: false, message: "Wrong location QR"};
-    }
-    const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-    const user = localStorage.getItem("username");
-    const already = attendance.find(a=>
-        a.user === user && a.date === session.date && a.subject === session.subject
+    const res = await fetch(`${BASE_URL}/session`);
+    return await res.json();
+}
+export async function getAttendanceBySession(location, subject, date)
+{
+    const res = await fetch(`${BASE_URL}/attendance`);
+    const data = await res.json();
+    return data.filter(
+        a =>
+            a.location === location && a.subject === subject && a.date === date
     );
-    if (already) return {success: false, message: "Already marked"};
-    attendance.push(
-        {
-            user,
-            location,
-            subject : session.subject,
-            status : "Pending",
-            time : new Date().toLocaleTimeString(),
-            date : session.date
-        });
-    localStorage.setItem("attendance", JSON.stringify(attendance));
-    return {success: true};
 }
-export function getStudentAttendance(username)
+export async function verifyAttendance({username, subject, date})
 {
-    const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-    return attendance.filter(a => a.user === username);
+    const res = await fetch(`${BASE_URL}/attendance/verify`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify({username, subject, date})
+    });
+    return await res.json();
 }
 
-export function getAttendanceBySession(location, subject, date)
+export async function markAttendance(location)
 {
-    const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-    return attendance.filter(a => a.location === location && a.subject === subject && a.date === date);
+    const username = localStorage.getItem("username");
+    const res = await fetch(`${BASE_URL}/attendance/mark`, {
+        method : "POST",
+        headers : {"Content-Type" : "application/json"},
+        body : JSON.stringify({username, location})
+    });
+    return await res.json();
 }
-export function verifyAttendance(index)
+export async function getStudentAttendance(username)
 {
-    const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
-    if (attendance[index])
-    {
-        attendance[index].status = "Present";
-        localStorage.setItem("attendance", JSON.stringify(attendance));
-        return true;
-    }
-    return false;
+    const res = await fetch(`${BASE_URL}/attendance`);
+    const data = await res.json();
+    return data.filter(a =>a.username === username);
 }
