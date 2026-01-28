@@ -4,11 +4,11 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     color: white;
     background:
     radial-gradient(circle at 2px 1px, rgba(255, 255, 255, 0.5) 1px, transparent 0),
-    linear-gradient(90deg, #001243, #0a2bff, #280068);
+    linear-gradient(90deg, #03002b, #0b0086, #040039);
     background-size: 25px 25px, 100% 100%;
     animation: gradientMove 180s linear infinite;
 }
@@ -21,7 +21,8 @@ body{
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(3px);
     border-radius: 35px;
-    padding: 80px;
+    padding: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 5px 5px 20px rgb(0, 0, 0);
     text-align: center;
 }
