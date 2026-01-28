@@ -88,7 +88,7 @@ async function verifyStudentAttendance(username, subject, date, btn)
     statusCell.classList.add("present");
     btn.innerText = "Verified";
     btn.disabled = true;
-    btn.style.cursor = "not-allowed";
+    btn.classList.add("verified");
 }
 function logout()
 {

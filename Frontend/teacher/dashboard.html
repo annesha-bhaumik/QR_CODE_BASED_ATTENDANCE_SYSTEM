@@ -70,6 +70,13 @@
             font-size: 14px;
             margin-top: 0px;
         }
+        button.verified, button.verified:hover, button.verified:active{
+            background-color: rgba(126, 126, 126, 0.4);
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
         .present{
             color: rgba(0, 224, 0, 1);
             font-weight: bold;
@@ -119,7 +126,7 @@
             <button class="view-btn" onclick="loadAttendance()">View Attendance</button>
         </div>
         <div class="card" id="attendanceCard" style="display: none;">
-            <h3>Attendance (Pending Verification)</h3>
+            <h3>Attendance</h3>
             <div class="table-container">
                 <table>
                     <thead>
